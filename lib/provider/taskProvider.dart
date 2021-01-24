@@ -4,12 +4,20 @@ import 'package:flutter/material.dart';
 
 class TaskProvider with ChangeNotifier {
   List<Task> _taskList = [];
+  bool _showModal = false;
+  bool _isDone = false;
   final firebaseRequest = FirebaseRequest();
 
   List<Task> get getTaskList => _taskList;
+  bool get getShowModal => _showModal;
+  bool get getIsDone => _isDone;
 
   set setTaskList(List<Task> taskList) {
     _taskList = taskList;
+  }
+
+  set setShowModal(bool value) {
+    _showModal = value;
   }
 
   TaskProvider() {
@@ -18,10 +26,23 @@ class TaskProvider with ChangeNotifier {
 
   getList() async {
     _taskList = await firebaseRequest.fetchGet();
-    //final data = await firebaseRequest.fetchGet();
-
-    //print(data);
     notifyListeners();
   }
 
+  modal() {
+    _showModal = !_showModal;
+    notifyListeners();
+  }
+
+  createTak(Task task) async {
+    await firebaseRequest.fetchPush(task);
+    getList();
+
+    notifyListeners();
+  }
+
+  finish() {
+    _isDone = !_isDone;
+    notifyListeners();
+  }
 }
