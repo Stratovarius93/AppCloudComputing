@@ -45,4 +45,9 @@ class TaskProvider with ChangeNotifier {
     _isDone = !_isDone;
     notifyListeners();
   }
+  updateTask(Task task)async{
+    final res = await firebaseRequest.fetchPut(task);
+    print(res);
+    notifyListeners();
+  }
 }

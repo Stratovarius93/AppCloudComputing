@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('App notas'),
+        title: Text('ToDo Task'),
       ),
       body: Stack(children: [
         Container(
@@ -27,12 +27,20 @@ class _HomeScreenState extends State<HomeScreen> {
               if (taskProvider.getTaskList.length != 0) {
                 return GestureDetector(
                   onTap: () {
-                    taskProvider.finish();
+                    final task = taskProvider.getTaskList[index];
+                    //print(task.status);
+                    if (task.status == 'done') {
+                      task.status = 'do';
+                    }else{
+                      task.status = 'done';
+                    }
+                    //task.status = 'done';
+                    taskProvider.updateTask(task);
                   },
                   child: ListTile(
                     title: Text(taskProvider.getTaskList[index].title),
                     subtitle: Text(taskProvider.getTaskList[index].description),
-                    trailing: taskProvider.getIsDone
+                    trailing: (taskProvider.getTaskList[index].status == 'done')
                         ? Icon(Icons.check)
                         : Icon(Icons.error_outline),
                   ),
